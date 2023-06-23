@@ -56,6 +56,16 @@ export class App {
       this.composer.renderer,
       this.scene,
       this.camera,
+      () => {
+        const characterPosition = this.characterManager.getLocalCharacterPositionAndRotation();
+        if (characterPosition) {
+          return characterPosition;
+        }
+        return {
+          position: { x: 0, y: 0, z: 0 },
+          rotation: { x: 0, y: 0, z: 0 },
+        };
+      },
     );
     this.mmlScene.init();
 

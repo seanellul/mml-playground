@@ -1,0 +1,70 @@
+<m-group x="4" ry="30" y="4">
+  <m-cube y="0" color="red"></m-cube>
+  <m-position-probe debug="true" id="my-probe" interval="100"></m-position-probe>
+  <m-group id="user-presence-holder"></m-group>
+</m-group>
+
+<script>
+  const connectedUsers = new Map();
+  const userPresenceHolder = document.getElementById("user-presence-holder");
+  const positionProbe = document.getElementById("my-probe");
+
+  function getOrCreateUser(connectionId) {
+    const user = connectedUsers.get(connectionId);
+    if (user) {
+      return user;
+    }
+    const userCube = document.createElement("m-cube");
+    userCube.setAttribute("color", `#${Math.floor(Math.random() * 0xffffff).toString(16)}`);
+    userPresenceHolder.append(userCube);
+    const newUser = {
+      cube: userCube,
+    };
+    connectedUsers.set(connectionId, newUser);
+    return newUser;
+  }
+
+  function clearUser(connectionId) {
+    const user = connectedUsers.get(connectionId);
+    if (!user) return;
+    user.cube.remove();
+    connectedUsers.delete(connectionId);
+  }
+
+  window.addEventListener("disconnected", (event) => {
+    const { connectionId } = event.detail;
+    clearUser(connectionId);
+  });
+
+  positionProbe.addEventListener("positionenter", (event) => {
+    const { connectionId, position, rotation } = event.detail;
+    const user = getOrCreateUser(connectionId);
+    user.cube.setAttribute("x", position.x);
+    user.cube.setAttribute("y", position.y);
+    user.cube.setAttribute("z", position.z);
+    user.cube.setAttribute("rx", rotation.x);
+    user.cube.setAttribute("ry", rotation.y);
+    user.cube.setAttribute("rz", rotation.z);
+  });
+
+  positionProbe.addEventListener("positionupdate", (event) => {
+    const { connectionId, position, rotation } = event.detail;
+    /*
+       It's possible to receive an update without an explicit enter event if this user is already in the range of
+       this element when the document is reloaded. In this case, we need to create the user as if this is an
+       enter event.
+      */
+    const user = getOrCreateUser(connectionId);
+    user.cube.setAttribute("x", position.x);
+    user.cube.setAttribute("y", position.y);
+    user.cube.setAttribute("z", position.z);
+    user.cube.setAttribute("rx", rotation.x);
+    user.cube.setAttribute("ry", rotation.y);
+    user.cube.setAttribute("rz", rotation.z);
+  });
+
+  positionProbe.addEventListener("positionleave", (event) => {
+    const { connectionId } = event.detail;
+    clearUser(connectionId);
+  });
+</script>

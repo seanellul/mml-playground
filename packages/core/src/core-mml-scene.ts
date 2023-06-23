@@ -2,27 +2,27 @@
 import {
   IMMLScene,
   Interaction,
+  InteractionListener,
   InteractionManager,
   MMLClickTrigger,
   PromptManager,
-  InteractionListener,
   PromptProps,
   registerCustomElementsToWindow,
-  ScenePosition,
   setGlobalMScene,
+  PositionAndRotation,
 } from "mml-web";
-import { AudioListener, Group, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { AudioListener, Group, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
 export class CoreMMLScene {
   private scene: THREE.Scene;
   private camera: THREE.Camera;
   private mmlScene: Partial<IMMLScene>;
-  private scenePosition: ScenePosition;
+  private getUserPositionAndRotation: () => PositionAndRotation;
   private promptManager: PromptManager;
   private interactionListener: InteractionListener;
   private elementsHolder: HTMLElement;
-  private audioListener: AudioListener;
 
+  private audioListener: AudioListener;
   private clickTrigger: MMLClickTrigger;
 
   constructor(
@@ -31,14 +31,12 @@ export class CoreMMLScene {
     renderer: WebGLRenderer,
     scene: Scene,
     camera: PerspectiveCamera,
+    getUserPositionAndRotation: () => PositionAndRotation,
   ) {
     this.scene = scene;
     this.camera = camera;
     this.elementsHolder = elementsHolder;
-    this.scenePosition = {
-      location: camera.position,
-      orientation: new Vector3(camera.rotation.x, camera.rotation.y, camera.rotation.z),
-    };
+    this.getUserPositionAndRotation = getUserPositionAndRotation;
 
     this.audioListener = new AudioListener();
 
@@ -50,7 +48,7 @@ export class CoreMMLScene {
       getThreeScene: () => scene,
       getRootContainer: () => group,
       getCamera: () => camera,
-      getUserPosition: () => this.scenePosition,
+      getUserPositionAndRotation: this.getUserPositionAndRotation,
       addCollider: () => {},
       updateCollider: () => {},
       removeCollider: () => {},

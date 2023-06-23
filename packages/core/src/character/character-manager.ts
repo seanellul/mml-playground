@@ -59,6 +59,19 @@ export class CharacterManager {
     return characterLoadingPromise;
   }
 
+  getLocalCharacterPositionAndRotation(): {
+    position: THREE.Vector3;
+    rotation: THREE.Euler;
+  } | null {
+    if (this.character) {
+      return {
+        position: this.character.model.position,
+        rotation: this.character.model.rotation,
+      };
+    }
+    return null;
+  }
+
   update(
     runTime: RunTime,
     inputManager: InputManager,
