@@ -9,7 +9,7 @@ import enableWs from "express-ws";
 import httpProxy from "http-proxy";
 import { LocalObservableDomFactory, EditableNetworkedDOM } from "networked-dom-server";
 
-const PLAYGROUND_DOCUMENT_PATH = path.resolve(__dirname, "../playground.html");
+const PLAYGROUND_DOCUMENT_PATH = path.resolve(__dirname, "../genesis.html");
 const PORT = process.env.PORT || 8080;
 const DOCUMENT_SOCKET_PATH = "/document";
 const CHARACTER_NETWORK_SOCKET_PATH = "/network";

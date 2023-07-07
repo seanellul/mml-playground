@@ -1,0 +1,40 @@
+<html>
+  <body>
+    
+    <m-prompt
+      message="Ask ChatGPT!"
+      placeholder="Ask GPT4!"
+      prefill="Build a yellow sphere"
+      id="my-prompt"
+      y="2"
+    >
+      <m-cube id="color-cube" color="white"></m-cube>
+    </m-prompt>
+
+    <m-label id="my-label" y="3" width="10" height="7" content="Deploy MML code from GPT4!" font-size="110" alignment="center" color="white" font-color="#000"></m-label>
+
+    <m-frame id="slot-frame" y="0.2" x="-10"></m-frame>
+
+    <script>
+      const mPrompt = document.getElementById("my-prompt");
+      const mCube = document.getElementById("color-cube");
+      const slotFrame = document.getElementById("slot-frame");
+
+      function handlePrompt(e) {
+        const color = e.detail.value;
+        mCube.setAttribute("color", color);
+
+        // Send a POST request to the server with the user's input
+        fetch('http://127.0.0.1:5000/process_input', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ user_input: color }),
+        })
+        .then(response => response.json()) 
+      }
+      mPrompt.addEventListener("prompt", handlePrompt);
+    </script>
+  </body>
+</html>

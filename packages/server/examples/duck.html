@@ -1,28 +1,24 @@
-<m-model
-  id="duck"
-  src="https://public.mml.io/duck.glb"
-  rx="180"
-  rz="180"
-  sx="2"
-  sy="2"
-  sz="2"
-  y="0"
-  ry="-45.00000000000001"
-  z="0"
-  x="0"
-></m-model>
+<html>
 
-<script>
-  //{PLAYGROUND_RUNTIME_CONSTANTS}
+    <m-label id="message" y="3" width="10" height="7" content="" font-size="40" alignment="center" color="white" font-color="#000"></m-label>
 
-  let r = 0;
+    <m-frame id="slot-frame" y="0.2" x="-10"></m-frame>
+  <script>
+    // This function fetches the variable and updates the H1
+    async function updateH1() {
+      try {
+        let response = await fetch('http://127.0.0.1:5000/get_variable');
+        let data = await response.json();
+        // let data = await response.json();
+        let latLabel = document.getElementById("message");
+        latLabel.setAttribute("content", data.the_var);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
 
-  function rotateDuck() {
-    r += 45;
-    document.getElementById("duck").setAttribute("ry", r);
-  }
+    // This will run the updateH1 function every 1000ms (1 second)
+    setInterval(updateH1, 7000);
+  </script>
 
-  setInterval(() => {
-    rotateDuck();
-  }, 500);
-</script>
+</html>
