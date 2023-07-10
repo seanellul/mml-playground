@@ -17,7 +17,11 @@ const EXAMPLE_DOCUMENTS_SOCKET_PATH = "/examples";
 let examplesHostUrl = "";
 
 const { app } = enableWs(express());
+app.use('/models', express.static(path.join(__dirname, '../examples/used')));
 app.enable("trust proxy");
+console.log("Serving static files from: ", path.join(__dirname, '../examples/used'));
+
+
 
 const getMmlDocumentContent = (documentPath: string) => {
   return fs.readFileSync(documentPath, { encoding: "utf8", flag: "r" }).replace(
