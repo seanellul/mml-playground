@@ -64,6 +64,7 @@ export class CharacterManager {
     network: Network,
     group: Group,
   ) {
+    
     if (this.character) {
       this.character.update(runTime.time);
       if (this.camera === null) this.camera = cameraManager.camera;

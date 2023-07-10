@@ -19,7 +19,8 @@ let examplesHostUrl = "";
 const { app } = enableWs(express());
 app.use('/models', express.static(path.join(__dirname, '../examples/used')));
 app.enable("trust proxy");
-console.log("Serving static files from: ", path.join(__dirname, '../examples/used'));
+
+
 
 
 
